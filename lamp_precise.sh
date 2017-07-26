@@ -46,58 +46,7 @@ sleep 4
 	git config --global user.name "$name"
 	read -p "Entre com seu email::" email
 	git config --global user.email "$email"
-	git config --list
-clear
-echo "Iniciando configuração apache"
-sleep 4	
-VHOST=$(cat <<EOF
-<VirtualHost *:80>
-        ServerAdmin webmaster@localhost
-        DocumentRoot /vagrant/html
-        <Directory />
-                Options FollowSymLinks
-                AllowOverride All
-        </Directory>
-        <Directory /vagrant/html/>
-                Options Indexes FollowSymLinks MultiViews
-                AllowOverride All
-                Order allow,deny
-                allow from all
-        </Directory>
-
-        ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-        <Directory "/usr/lib/cgi-bin">
-                AllowOverride All
-                Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-                Order allow,deny
-                Allow from all
-        </Directory>
-
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-
-        # Possible values include: debug, info, notice, warn, error, crit,
-        # alert, emerg.
-        LogLevel warn
-
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-    Alias /doc/ "/usr/share/doc/"
-    <Directory "/usr/share/doc/">
-        Options Indexes MultiViews FollowSymLinks
-        AllowOverride None
-        Order deny,allow
-        Deny from all
-        Allow from 127.0.0.0/255.0.0.0 ::1/128
-    </Directory>
-
-</VirtualHost>
-EOF
-)
-echo "${VHOST}" > /etc/apache2/sites-available/default	
-clear
-echo "Habilitando default e reniciando apache2"
-sleep 4	
-	sudo a2ensite default	
+	git config --list    
 clear
 echo "Inserindo Permisão na pasta de desenvolvimento"
 sleep 4
@@ -108,5 +57,3 @@ sleep 4
 	sudo /etc/init.d/apache2 restart
 clear
 echo "Obrigado $USER, até a próxima!"
-
-
